@@ -19,6 +19,9 @@ This Python script utilizes the MTCNN (Multi-Task Cascaded Convolutional Network
 1. Clone the repository to your local machine.
 2. Install the required dependencies (OpenCV, NumPy, MTCNN, TensorFlow).
 3. Run the Python script (`drunk_detection.py`).
+   For an alternative approach that allows switching between an SVM and an MLP
+   classifier, run `drunk_detection_svm_mlp.py` instead. Press `m` while the
+   window is focused to change the active model in real time.
 4. Ensure your webcam is connected and accessible.
 5. Observe the real-time video stream with detected faces and their associated labels.
 
@@ -26,6 +29,21 @@ This Python script utilizes the MTCNN (Multi-Task Cascaded Convolutional Network
 
 - This script is provided for demonstration purposes and should not be relied upon for real-world applications without proper testing and validation.
 - The eye detection model (`facial_drunk.keras`) used in this script should be trained separately using appropriate data and methodologies.
+- To use the optional SVM classifier you must supply a trained model saved as `drunk_svm.joblib`. The repository does not include one by default.
+
+### Training your own SVM model
+
+1. Collect a dataset of face images divided into two folders: `sober/` and `drunk/`.
+2. Run `python train_svm.py <path_to_dataset>` to train a linear SVM on the images.
+3. The script detects faces with MTCNN, normalizes them to 96×96 pixels and saves the model to `drunk_svm.joblib`.
+4. Place the resulting file next to `drunk_detection_svm_mlp.py` to enable the SVM mode.
+
+### Training your own MLP model
+
+1. Use the same folder structure with `sober/` and `drunk/` images.
+2. Run `python train_mlp.py <path_to_dataset>` to train a small neural network on the images.
+3. The script detects faces with MTCNN, normalizes them to 96×96 pixels and saves the model to `facial_drunk.keras`.
+4. Put the resulting file next to `drunk_detection_svm_mlp.py` to enable the MLP mode.
 
 ## Dependencies
 
