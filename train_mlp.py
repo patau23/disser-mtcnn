@@ -45,6 +45,7 @@ def preprocess_face(img):
     norm = resized.astype("float32") / 255.0
     return norm.reshape(96, 96, 1)
 
+
 def load_dataset(root):
     data = []
     labels = []
@@ -84,6 +85,7 @@ def train_and_save(dataset_dir, out_path="facial_drunk.keras", epochs=10, batch_
     model.save(out_path)
     print(f"Model saved to {out_path}")
 
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Train MLP for drunk detection")
@@ -93,3 +95,9 @@ if __name__ == "__main__":
     parser.add_argument("--batch", type=int, default=32, help="Batch size")
     args = parser.parse_args()
     train_and_save(args.dataset, args.out, args.epochs, args.batch)
+
+
+# Если запускать через MLP обучение - то нужно учитывать что он заменит старый формат facial_drunk.keras
+# Старый facial_drunk.keras - находится в директории old-keras если нужно использовать его
+# КОМАНДА ДЛЯ ЗАПУСКА:
+# python3 train_mlp.py ./dataset

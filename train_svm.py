@@ -1,3 +1,5 @@
+
+# !!!!! ЧТОБЫ ЗАПУСТИТЬ ОБУЧЕНИЕ СВМ-ки: python3 train_svm.py ./dataset --out drunk_svm.joblib !!!!!
 import os
 import cv2
 import numpy as np
@@ -8,11 +10,12 @@ from joblib import dump
 
 def detect_and_align_face(frame):
     """Detect a face with MTCNN and align it by eye line."""
+    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     detector = getattr(detect_and_align_face, "detector", None)
     if detector is None:
         detector = MTCNN()
         detect_and_align_face.detector = detector
-    results = detector.detect_faces(frame)
+    results = detector.detect_faces(rgb)
     if not results:
         return None
     det = results[0]
@@ -38,6 +41,7 @@ def detect_and_align_face(frame):
         return rotated[min_y:max_y, min_x:max_x]
     return frame[y:y + h, x:x + w]
 
+
 def preprocess_face(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     resized = cv2.resize(gray, (96, 96))
@@ -48,6 +52,7 @@ def load_dataset(root):
     labels = []
     for name, label in [("sober", 0), ("drunk", 1)]:
         folder = os.path.join(root, name)
+        print('1', folder)
         if not os.path.isdir(folder):
             continue
         for file in os.listdir(folder):
@@ -63,8 +68,10 @@ def load_dataset(root):
             labels.append(label)
     return np.array(data), np.array(labels)
 
+
 def train_and_save(dataset_dir, out_path="drunk_svm.joblib"):
     X, y = load_dataset(dataset_dir)
+    print(dataset_dir)
     if len(X) == 0:
         raise RuntimeError("No training data found")
     clf = SVC(kernel="linear", probability=True)

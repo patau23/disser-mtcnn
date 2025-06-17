@@ -113,6 +113,7 @@ def classify_with_mlp(face_array):
 
 def main():
     current_model = "svm"
+
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
         print("Failed to open camera")
